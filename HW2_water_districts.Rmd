@@ -1,0 +1,66 @@
+---
+title: "Hw 2 - water dsitricts"
+author: "Renee LaManna, Alia Ajina"
+date: "4/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(janitor)
+library(cowplot)
+library(patchwork)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+water_districts <- read_csv(here("data", "water_districts.csv")) %>% 
+  clean_names
+```
+
+```{r}
+p1 <- ggplot(data = water_districts, aes(x = reduction, y = mc_kern)) +
+  geom_point(size = .6) +
+  theme_minimal() +
+  geom_smooth() + 
+  stat_regline_equation(label.x=80, label.y=70)
+
+p2 <- ggplot(data = water_districts, aes(x = reduction, y = mc_mojave)) +
+  geom_point(size = .6) +
+  theme_minimal() +
+  geom_smooth() + 
+  stat_regline_equation(label.x=80, label.y=70)
+
+p3 <- ggplot(data = water_districts, aes(x = reduction, y = mc_antelope)) +
+  geom_point(size = 0.6) +
+  theme_minimal() +
+  geom_smooth() + 
+  stat_regline_equation(label.x=80, label.y=70)
+
+p4 <- ggplot(data = water_districts, aes(x = reduction, y = mc_ventura)) +
+  geom_point(size=.6) +
+  theme_minimal() +
+  geom_smooth() +
+  stat_regline_equation(label.x=80, label.y=70)
+
+ggp_combined <- p1 + p2 + p3 + p4
+
+ggp_combined 
+
+  
+```
+
+```{r}
+# linear models for each district
+
+lm_kern <- lm(mc_kern~reduction, data = water_districts)
+lm_mojave <- lm(mc_mojave~reduction, data = water_districts)
+lm_antelope <- lm(mc_antelope~reduction, data = water_districts)
+lm_ventura <- lm(mc_ventura~reduction, data = water_districts)
+
+```
+
