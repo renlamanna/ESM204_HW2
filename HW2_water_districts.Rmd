@@ -95,12 +95,12 @@ mojave_data <- mojave_data %>%  mutate(water_demand = mojave.baseline-reduction)
 
 # Using demand data for kern and mojave, join them into on dataset for plotting
 
-joined_demand <- bind_rows(mojave_data,
-                           kern_data)
+joined_demand <- bind_rows("Mojave" = mojave_data,
+                           "Kern" = kern_data, .id = "District")
 
 # plot the demand
 
-ggplot(kern_data, aes(x=water_demand,y = predicted_mc)) +
+ggplot(joined_demand, aes(x=water_demand,y = predicted_mc, color = District)) +
   geom_line() +
   labs(x = "Water Demand (AF)", y = "$/AF") 
 ```
