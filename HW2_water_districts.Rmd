@@ -35,25 +35,52 @@ ggplot(data = water_longer, aes(x = reduction, y = mc)) +
   geom_point(size = .6, aes(color = district)) +
   theme_minimal() +
   geom_smooth(aes(color = district)) + 
-  stat_regline_equation(label.x=80, label.y=70)
+  # stat_regline_equation(label.x=80, label.y=70) 
+  labs(y = "Price ($/Acre Foot)", x = "Acre Foot")
 
 
   
 ```
 
+
 ```{r}
 # linear models for each district
 
 lm_kern <- lm(mc_kern~0+reduction, data = water_districts)
-lm_mojave <- lm(mc_mojave~reduction, data = water_districts)
-lm_antelope <- lm(mc_antelope~reduction, data = water_districts)
-lm_ventura <- lm(mc_ventura~reduction, data = water_districts)
+lm_mojave <- lm(mc_mojave~0+reduction, data = water_districts)
+lm_antelope <- lm(mc_antelope~0+reduction, data = water_districts)
+lm_ventura <- lm(mc_ventura~0+reduction, data = water_districts)
 
 lm_kern
 lm_mojave
 ```
 
 ```{r}
+# Demand curves for water
+
+## We define a vector of 0 to baseline use to predict MB of water use
+kern_demand <- seq(0, 150, length.out=100)
+mojave_demand <- seq(0, 140, length.out=100)
+antelope_demand <- seq(0, 220, length.out=100)
+ventura_demand <- seq(0, 245, length.out=100)
+
+
+## We then substitute abatement for baseline - water use
+kern <- bind_cols(water_use = water_use_ag,
+                linear_mb = predict_curve((150 - kern_demand), model_ag))
+
+mojave <- bind_cols(water_use = water_use_ind,
+                 linear_mb = predict_curve((140 - mojave_demand), model_ind))
+
+antelope <- bind_cols(water_use = water_use_meat,
+                  linear_mb = predict_curve((220 - antelope_demand), model_meat))
+
+ventura <- bind_cols(water_use = water_use_urb,
+                 linear_mb = predict_curve((245 - ventura_demand), model_urb))
+
+
+               
+
 
 ```
 
