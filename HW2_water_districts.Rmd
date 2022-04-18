@@ -52,35 +52,31 @@ lm_antelope <- lm(mc_antelope~0+reduction, data = water_districts)
 lm_ventura <- lm(mc_ventura~0+reduction, data = water_districts)
 
 lm_kern
-lm_mojave
+lm_mojave 
+lm_antelope
+lm_ventura
 ```
 
 ```{r}
 # Demand curves for water
 
-## We define a vector of 0 to baseline use to predict MB of water use
-kern_demand <- seq(0, 150, length.out=100)
-mojave_demand <- seq(0, 140, length.out=100)
-antelope_demand <- seq(0, 220, length.out=100)
-ventura_demand <- seq(0, 245, length.out=100)
-
-
-## We then substitute abatement for baseline - water use
-kern <- bind_cols(water_use = water_use_ag,
-                linear_mb = predict_curve((150 - kern_demand), model_ag))
-
-mojave <- bind_cols(water_use = water_use_ind,
-                 linear_mb = predict_curve((140 - mojave_demand), model_ind))
-
-antelope <- bind_cols(water_use = water_use_meat,
-                  linear_mb = predict_curve((220 - antelope_demand), model_meat))
-
-ventura <- bind_cols(water_use = water_use_urb,
-                 linear_mb = predict_curve((245 - ventura_demand), model_urb))
-
-
-               
-
-
+demand_kern <-function(x) 343.5-2.29*x
 ```
+
+```{r}
+ggplot() +
+  scale_x_continuous(name="x", limits=c(0,300)) +
+  scale_y_continuous(name="y", limits=c(-5,700)) +
+  geom_abline(mapping = NULL,
+  data = NULL, slope = -2.29,
+             intercept = 343.5) +
+  geom_abline(slope = -3.8,
+              intercept = 532.56) +
+  geom_abline(slope = -2.86,
+              intercept = 628.76) +
+  geom_abline(slope = -1.776, 
+              intercept = 435.12)
+```
+
+
 
