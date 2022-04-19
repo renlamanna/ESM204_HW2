@@ -84,14 +84,15 @@ ventura_data <- tibble(reduction = 0:245)
 predicted_mc <- predict(mod.ventura, newdata = ventura_data)
 ventura_data <- ventura_data %>% mutate(predicted_mc=predicted_mc)
 
-joined_mc <- bind_rows("Mojave" = mojave_data,
-                           "Kern" = kern_data, .id = "District")
+
 
 
 # plotting predicted line
-ggplot(mac, aes(x=reduction, y = mc_kern)) +
+ggplot(mac_longer, aes(x=reduction, y = mc), color = "district")) +
   geom_point() +
-  geom_line(data = kern_data, aes(x = reduction, y = predicted_mc))
+  geom_line(data = kern_data, aes(x = reduction, y = predicted_mc)) +
+  geom_line(data = mojave_data, aes(x = reduction, y = predicted_mc)) 
+  
 ```
 
 ```{r}
