@@ -116,8 +116,15 @@ joined_demand <- bind_rows("Mojave" = mojave_data_demand,
 # plot the demand
 
 ggplot(joined_demand, aes(x=water_demand,y = predicted_mc, color = District)) +
-  geom_line() +
-  labs(x = "Water Demand (AF)", y = "$/AF") 
+  geom_line(size=1) +
+  labs(x = "Water Demand (AF)", y = "$/AF") +
+  theme_minimal() +
+  scale_color_manual(values = c("sienna", "darkseagreen", "goldenrod", "steelblue"))  +
+  annotate("text", x = 210, y = 315, label = "MB(water use) = 343.5-2.3x",color = "darkseagreen", size = 3) +
+  annotate("text", x = 210, y = 270, label = "MB(water use) = 532.6-3.8x",color = "goldenrod", size = 3) +
+   annotate("text", x = 210, y = 360, label = "MB(water use) = 628.8-2.9x",color = "sienna", size = 3) +
+   annotate("text", x = 210, y = 226, label = "MB(water use) = 435.1-1.8x",color = "steelblue", size = 3)
+   
 ```
 
 
