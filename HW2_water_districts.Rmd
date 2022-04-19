@@ -88,33 +88,30 @@ ventura_data <- ventura_data %>% mutate(predicted_mc=predicted_mc)
 
 
 # plotting predicted line
-ggplot(mac_longer, aes(x=reduction, y = mc), color = "district")) +
-  geom_point() +
+ggplot(data = mac_longer, aes(x=reduction, y = mc)) +
+  geom_point(aes(color = district), size = .6) +
   geom_line(data = kern_data, aes(x = reduction, y = predicted_mc)) +
-  geom_line(data = mojave_data, aes(x = reduction, y = predicted_mc)) 
+  geom_line(data = mojave_data, aes(x = reduction, y = predicted_mc)) +
+  geom_line(data = antelope_data, aes(x = reduction, y = predicted_mc)) +
+  geom_line(data = ventura_data, aes(x = reduction, y = predicted_mc))
   
-```
-
-```{r}
-# plotting predicted line
-ggplot(mac, aes(x=reduction, y = mc_kern)) +
-  geom_point() +
-  geom_line(data = kern_data, aes(x = reduction, y = predicted_mc))
 ```
 
 
 
 ```{r}
 # derive districts demand curve or use as baseline (no policy) - abatement
-kern_data <- kern_data %>%  mutate(water_demand = kern.baseline-reduction)
-mojave_data <- mojave_data %>%  mutate(water_demand = mojave.baseline-reduction)
-antelope_data <- antelope_data %>%  mutate(water_demand = antelope.baseline-reduction)
-
+kern_data_demand <- kern_data %>%  mutate(water_demand = kern.baseline-reduction)
+mojave_data_demand <- mojave_data %>%  mutate(water_demand = mojave.baseline-reduction)
+antelope_data_demand <- antelope_data %>%  mutate(water_demand = antelope.baseline-reduction)
+ventura_data_demand <- ventura_data %>%  mutate(water_demand = ventura.baseline-reduction)
 
 # Using demand data for kern and mojave, join them into on dataset for plotting
 
-joined_demand <- bind_rows("Mojave" = mojave_data,
-                           "Kern" = kern_data, .id = "District")
+joined_demand <- bind_rows("Mojave" = mojave_data_demand,
+                           "Kern" = kern_data_demand, 
+                           "Antelope" = antelope_data_demand,
+                           "Ventura" = ventura_data_demand, .id = "District")
 
 # plot the demand
 
