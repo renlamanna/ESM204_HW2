@@ -23,11 +23,6 @@ mac <- read_csv(here("data", "water_districts.csv")) %>%
 
 ```
 
-```{r}
-
-```
-
-
 
 ```{r}
 mac_longer <- pivot_longer(data = mac,
@@ -70,6 +65,28 @@ kern.baseline <- 150
 kern_data <- tibble(reduction = 0:150) # create vector of equally spaced numbers
 predicted_mc <- predict(mod.kern, newdata = kern_data)
 kern_data <- kern_data %>% mutate(predicted_mc = predicted_mc)
+# fitting line for mojave
+mod.mojave <- lm(mc_mojave ~ 0 + reduction, data = mac)
+mojave.baseline <-140
+mojave_data <- tibble(reduction = 0:140) # create vector of equally spaced numbers
+predicted_mc <- predict(mod.mojave, newdata = mojave_data)
+mojave_data <- mojave_data %>% mutate(predicted_mc = predicted_mc)
+# fitting line for antelope
+mod.antelope <- lm(mc_antelope ~ 0 + reduction, data = mac)
+antelope.baseline <- 220
+antelope_data <- tibble(reduction = 0:220)
+predicted_mc <- predict(mod.antelope, newdata = antelope_data)
+antelope_data <- antelope_data %>% mutate(predicted_mc = predicted_mc)
+# fitting the line for ventura
+mod.ventura <- lm(mc_ventura ~ 0 + reduction, data = mac)
+ventura.baseline <-245
+ventura_data <- tibble(reduction = 0:245)
+predicted_mc <- predict(mod.ventura, newdata = ventura_data)
+ventura_data <- ventura_data %>% mutate(predicted_mc=predicted_mc)
+
+joined_mc <- bind_rows("Mojave" = mojave_data,
+                           "Kern" = kern_data, .id = "District")
+
 
 # plotting predicted line
 ggplot(mac, aes(x=reduction, y = mc_kern)) +
@@ -78,12 +95,10 @@ ggplot(mac, aes(x=reduction, y = mc_kern)) +
 ```
 
 ```{r}
-# fitting line for kern
-mod.mojave <- lm(mc_mojave ~ 0 + reduction, data = mac)
-mojave.baseline <-140
-mojave_data <- tibble(reduction = 0:140) # create vector of equally spaced numbers
-predicted_mc <- predict(mod.mojave, newdata = mojave_data)
-mojave_data <- mojave_data %>% mutate(predicted_mc = predicted_mc)
+# plotting predicted line
+ggplot(mac, aes(x=reduction, y = mc_kern)) +
+  geom_point() +
+  geom_line(data = kern_data, aes(x = reduction, y = predicted_mc))
 ```
 
 
@@ -92,6 +107,8 @@ mojave_data <- mojave_data %>% mutate(predicted_mc = predicted_mc)
 # derive districts demand curve or use as baseline (no policy) - abatement
 kern_data <- kern_data %>%  mutate(water_demand = kern.baseline-reduction)
 mojave_data <- mojave_data %>%  mutate(water_demand = mojave.baseline-reduction)
+antelope_data <- antelope_data %>%  mutate(water_demand = antelope.baseline-reduction)
+
 
 # Using demand data for kern and mojave, join them into on dataset for plotting
 
@@ -105,26 +122,9 @@ ggplot(joined_demand, aes(x=water_demand,y = predicted_mc, color = District)) +
   labs(x = "Water Demand (AF)", y = "$/AF") 
 ```
 
-```{r}
-# Demand curves for water
 
-demand_kern <-function(x) 343.5-2.29*x
-```
 
-```{r}
-ggplot() +
-  scale_x_continuous(name="x", limits=c(0,300)) +
-  scale_y_continuous(name="y", limits=c(-5,700)) +
-  geom_abline(mapping = NULL,
-  data = NULL, slope = -2.29,
-             intercept = 343.5) +
-  geom_abline(slope = -3.8,
-              intercept = 532.56) +
-  geom_abline(slope = -2.86,
-              intercept = 628.76) +
-  geom_abline(slope = -1.776, 
-              intercept = 435.12)
-```
+
 
 
 
