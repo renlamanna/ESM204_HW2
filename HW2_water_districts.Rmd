@@ -93,7 +93,8 @@ ggplot(data = mac_longer, aes(x=reduction, y = mc)) +
   geom_line(data = kern_data, aes(x = reduction, y = predicted_mc)) +
   geom_line(data = mojave_data, aes(x = reduction, y = predicted_mc)) +
   geom_line(data = antelope_data, aes(x = reduction, y = predicted_mc)) +
-  geom_line(data = ventura_data, aes(x = reduction, y = predicted_mc))
+  geom_line(data = ventura_data, aes(x = reduction, y = predicted_mc)) +
+  geom_hline(yintercept = 158.05)
   
 ```
 
